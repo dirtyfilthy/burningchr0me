@@ -36,7 +36,7 @@ LOGO = f"""
 ░▒▓█▓▒░     ░▒▓███████▓▒░▒▓██████▓▒░░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░▒▓█████▓▒░   
  ░▒▓█▓▒░     ░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░        
  ░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░        
-   ░▒▓█████▓▒░░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░▒▓███████▓▒░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░▒▓███████▓▒░ 
+ ░▒▓█████▓▒░░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░▒▓███████▓▒░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░▒▓███████▓▒░ 
                                                                                        
 {NAME} v{VERSION} by {AUTHOR}                                                                                      
 """
@@ -68,8 +68,10 @@ def parse_args():
     parser.add_argument("-e","--encrypt", action="store_true", help="Encrypt a file")
     parser.add_argument("-d","--decrypt", action="store_true", help="Decrypt a file")
     parser.add_argument("-k","--key", type=str,help="Key to use for encryption or decryption")
-    parser.add_argument("path", help="Path to encrypt or decrypt")
+    parser.add_argument("-l","--list", action="store_true", help="interpret PATH as a file of newline separated paths")
     parser.add_argument("-v","--verbose", action="store_true", help="Verbose output")
+    parser.add_argument("PATH", help="Path to encrypt or decrypt")
+   
     return parser.parse_args()
 
 
@@ -144,18 +146,27 @@ def main():
         args.key = bytes.fromhex(args.key)
     print_debug(f"Key: {args.key}")
     print_info(f"Using key: {args.key.hex()}")
-    if not os.path.exists(args.path):
-        print_error(f"File {args.path} does not exist")
+    if not os.path.exists(args.PATH):
+        print_error(f"File {args.PATH} does not exist")
         sys.exit(1)
-   
+  
+    paths = [args.PATH]
 
-    if args.encrypt:
-        print_action(f"Encrypting {args.path}")
-        encrypt_path(args.path, args.key)
-    elif args.decrypt:
-        print_action(f"Decrypting {args.path}")
-        decrypt_path(args.path, args.key)
+    if args.list:
+        with open(args.PATH, "r") as f:
+            paths = f.read().strip().split("\n")
+        print_debug(f"Paths: {paths}")
 
+    for path in paths:
+
+        if not os.path.exists(path):
+            print_error(f"File {path} does not exist")
+        if args.encrypt:
+            print_action(f"Encrypting {path}")
+            encrypt_path(path, args.key)
+        elif args.decrypt:
+            print_action(f"Decrypting {path}")
+            decrypt_path(path, args.key)
 
 
 ## encryption functions
