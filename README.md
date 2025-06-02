@@ -74,6 +74,12 @@ python BurningChr0me.py -d /path/to/directory -k 0123456789abcdef...
 python BurningChr0me.py -e /path/to/directory -v
 ```
 
+## Bundling and unbundling
+
+This app has a single dependency, pycryptdome. However, in some non-permissive environments, you may not have access to internet to install the module. Instead, you can use the ./bundle.sh script to build a tarball that includes the dependency. 
+
+After uncompressing the tarball on the other end, run ./unbundle.sh to install pycryptome from source in a venv, and then ./run.sh to run the application
+
 ## Security Notes
 
 - The tool uses AES-256-GCM encryption, which provides both confidentiality and authenticity
