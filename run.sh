@@ -1,5 +1,6 @@
 #!/bin/sh
 
+export LANG=en_US.UTF-8 # needed for older linux 
 CURRENT_DIR=$(cd $(dirname $0); pwd)
 WORKDIR=$(mktemp -d)
 PYTHON3="/usr/bin/env python3"
