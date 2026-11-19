@@ -19,13 +19,15 @@
 ```
 A ransomware simulation tool that recursively encrypts and decrypts files using AES-256-GCM encryption.
 
+**Status:** not actively developed. It does what I needed it to do. I'll look at pull requests when I can, and forks are welcome.
+
 
 ## Installation
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/BurningChr0me.git
-cd BurningChr0me
+git clone https://github.com/dirtyfilthy/burningchr0me.git
+cd burningchr0me
 ```
 
 2. Install the required dependencies:
